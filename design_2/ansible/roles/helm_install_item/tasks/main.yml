@@ -13,13 +13,13 @@
 
 - name: Create cluster dir if it doesn't already exist
   file:
-    path: "{{ cluster_manifest_files_dir }}/values"
+    path: "{{ cluster_manifest_files_dir }}"
     state: directory
 
 - name: create helm override values file
   template:
     src: "{{ item_name }}_values.yaml.j2"
-    dest: "{{ cluster_manifest_files_dir }}/values/{{ item_name }}_values.yaml"
+    dest: "{{ cluster_manifest_files_dir }}/{{ item_name }}_values.yaml"
 
 - name: Delete old templates dir if it exists
   file:
@@ -30,31 +30,63 @@
   shell: |
     {{ helm_command }} template  --name {{ item_release_name }} \
     --namespace {{ item_namespace }} ../helm/{{ item_name }} \
-    -f {{ cluster_manifest_files_dir }}/values/{{ item_name }}_values.yaml \
+    -f {{ cluster_manifest_files_dir }}/{{ item_name }}_values.yaml \
     --output-dir {{ cluster_manifest_files_dir }}
 
-# - name: Get all CRD files
-#   shell: |
-#     find {{ cluster_manifest_files_dir }}/{{ item_name }} \
-#     -type f -name '*crd*'
-#   register: crd_file_paths
+- name: Delete Values file
+  file:
+    path: "{{ cluster_manifest_files_dir }}/{{ item_name }}_values.yaml" 
+    state: absent
 
-# - name: Install CRD's first
-#   shell: |
-#     {{ kubectl_command }} --context {{ context }} \
-#     apply -R  -f {{ item }}
-#   with_items: "{{ crd_file_paths.stdout_lines }}"
-#   when: crd_file_paths.stdout_lines | length > "0" | int
+- name: Get all CRD files
+  shell: |
+    find {{ cluster_manifest_files_dir }}/{{ item_name }} \
+    -type f -name '*crd*'
+  register: crd_file_paths
 
-# ## TODO optimize this make this a poll and wait
-# - name: Wait for CRD'S to be installed
-#   pause:
-#     minutes: 1
-#   when: crd_file_paths.stdout_lines | length > "0" | int
+- name: Install CRD's first
+  shell: |
+    {{ kubectl_command }} --context {{ context }} \
+    apply -R  -f {{ item }}
+  with_items: "{{ crd_file_paths.stdout_lines }}"
+  when: crd_file_paths.stdout_lines | length > "0" | int
 
-# - name: Install components into cluster
-#   shell: |
-#     {{ kubectl_command }} --context {{ context }} \
-#     apply -R  -f {{ cluster_manifest_files_dir }}/{{ item_name }}
+## TODO optimize this make this a poll and wait
+- name: Wait for CRD'S to be installed
+  pause:
+    minutes: 1
+  when: crd_file_paths.stdout_lines | length > "0" | int
 
+- name: Find all Secrets Files
+  find:
+    paths: "{{ cluster_manifest_files_dir }}/{{ item_name }}"
+    recurse: yes
+    patterns: '*secret*'
+  register: Secrets
+
+- debug:
+    msg: "{{ Secrets }}"
+
+
+- name: Install components into cluster
+  shell: |
+    {{ kubectl_command }} --context {{ context }} \
+    apply -R  -f {{ cluster_manifest_files_dir }}/{{ item_name }}
+  when: env != "prod"
+
+- name: Get git branch
+  shell: git rev-parse --abbrev-ref HEAD
+  register: git_branch
+  when: env == "prod"
+
+- fail:
+    msg: "You can not push to master branch"
+  when: git_branch.stdout == "master"
+
+- name: Install components into cluster
+  shell: |
+    cd $(git rev-parse --show-cdup) && \
+    git add . && \ 
+    git commit -m "Ansible pushes to prod"
+  when: env == "prod"
 ...

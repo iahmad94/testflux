@@ -18,7 +18,7 @@ spec:
       labels:
         name: flux
     spec:
-      serviceAccount: flux
+      serviceAccountName: flux
       volumes:
       - name: git-key
         secret:
@@ -36,7 +36,7 @@ spec:
       # file, which you will need to do if you host your own git
       # repo rather than using github or the like. You'll also need to
       # mount it into the container, below. See
-      # https://github.com/weaveworks/flux/blob/master/site/standalone/setup.md#using-a-private-git-host
+      # https://github.com/weaveworks/flux/blob/master/site/standalone-setup.md#using-a-private-git-host
       # - name: ssh-config
       #   configMap:
       #     name: flux-ssh-config
@@ -57,20 +57,18 @@ spec:
         # and replace the tag here.
         image: quay.io/weaveworks/{{ flux_image_version }}
         imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
         ports:
         - containerPort: 3030 # informational
-        - containerPort: 3031 # metrics
         volumeMounts:
         - name: git-key
           mountPath: /etc/fluxd/ssh # to match location given in image's /etc/ssh/config
           readOnly: true # this will be the case perforce in K8s >=1.10
         - name: git-keygen
           mountPath: /var/fluxd/keygen # to match location given in image's /etc/ssh/config
-        resources:
-          requests:
-            memory: {{ flux_memory_request }}
-          limits:
-            memory: {{ flux_memory_limit }}
 
         # Include this if you need to mount a customised known_hosts
         # file; you'll also need the volume declared above.
@@ -96,7 +94,10 @@ spec:
         # or with a different service name, you can supply these
         # following two arguments to tell fluxd how to connect to it.
         # - --memcached-hostname=memcached.default.svc.cluster.local
-        # - --memcached-service=memcached
+
+        # use the memcached ClusterIP service name by setting the
+        # memcached-service to string empty
+        - --memcached-service=
 
         # this must be supplied, and be in the tmpfs (emptyDir)
         # mounted above, for K8s >= 1.10

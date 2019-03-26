@@ -1,0 +1,24 @@
+---
+- name: Validate that all cluster components are healthy
+  shell: |
+    {{ kubectl_command }} --context {{ context }} \
+    get nodes --no-headers | \
+    grep -v Ready
+  ignore_errors: true
+  register: cluster_state
+
+- fail:
+    msg: "Some cluster component is in Not Ready state"
+  when: cluster_state.stdout_lines | length != 0
+
+- name: Create cluster dir if it doesn't already exist
+  file:
+    path: "{{ cluster_manifest_files_dir }}"
+    state: directory
+
+- name: create helm override values file
+  template:
+    src: "{{ item_name }}_values.yaml.j2"
+    dest: "{{ cluster_manifest_files_dir }}/{{ item_name }}_values.yaml"
+
+...

@@ -1,0 +1,31 @@
+#General Vars
+kubectl_command: kubectl
+helm_command: helm
+cluster_name: ismail.oteemo-xc.com
+context: "{{ cluster_name }}"
+
+alertmanager_slack_url: https://test.test.test.com
+
+alertmanager_storage_size: 30
+grafana_storage_size: 30
+prometheus_storage_size: 30
+grafana_adm_password: admin123
+
+#Task Specific
+item_name: prometheus-operator
+item_release_name: prometheus
+item_namespace: design2
+
+cluster_manifest_files_dir: "../clusters/{{cluster_name}}"
+domain_name: oteemo-xc.com
+aws_region: us-east-1
+
+#Prometheus Operator Vars
+prometheus_ingress_annotations:
+  blah: "blah"
+
+alertmanager_ingress_annotations:
+  blah: "blah"
+
+grafana_ingress_annotations:
+  blah: "blah"
