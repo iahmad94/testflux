@@ -1,0 +1,60 @@
+---
+- name: Validate that all cluster components are healthy
+  shell: |
+    {{ kubectl_command }} --context {{ context }} \
+    get nodes --no-headers | \
+    grep -v Ready
+  ignore_errors: true
+  register: cluster_state
+
+- fail:
+    msg: "Some cluster component is in Not Ready state"
+  when: cluster_state.stdout_lines | length != 0
+
+- name: Create cluster dir if it doesn't already exist
+  file:
+    path: "{{ cluster_manifest_files_dir }}/values"
+    state: directory
+
+- name: create helm override values file
+  template:
+    src: "{{ item_name }}_values.yaml.j2"
+    dest: "{{ cluster_manifest_files_dir }}/values/{{ item_name }}_values.yaml"
+
+- name: Delete old templates dir if it exists
+  file:
+    path: "{{ cluster_manifest_files_dir }}/{{ item_name }}"
+    state: absent
+
+- name: Template out values file
+  shell: |
+    {{ helm_command }} template  --name {{ item_release_name }} \
+    --namespace {{ item_namespace }} ../helm/{{ item_name }} \
+    -f {{ cluster_manifest_files_dir }}/values/{{ item_name }}_values.yaml \
+    --output-dir {{ cluster_manifest_files_dir }}
+
+# - name: Get all CRD files
+#   shell: |
+#     find {{ cluster_manifest_files_dir }}/{{ item_name }} \
+#     -type f -name '*crd*'
+#   register: crd_file_paths
+
+# - name: Install CRD's first
+#   shell: |
+#     {{ kubectl_command }} --context {{ context }} \
+#     apply -R  -f {{ item }}
+#   with_items: "{{ crd_file_paths.stdout_lines }}"
+#   when: crd_file_paths.stdout_lines | length > "0" | int
+
+# ## TODO optimize this make this a poll and wait
+# - name: Wait for CRD'S to be installed
+#   pause:
+#     minutes: 1
+#   when: crd_file_paths.stdout_lines | length > "0" | int
+
+# - name: Install components into cluster
+#   shell: |
+#     {{ kubectl_command }} --context {{ context }} \
+#     apply -R  -f {{ cluster_manifest_files_dir }}/{{ item_name }}
+
+...

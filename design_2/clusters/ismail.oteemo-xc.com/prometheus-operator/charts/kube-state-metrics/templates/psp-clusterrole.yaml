@@ -1,0 +1,17 @@
+---
+# Source: prometheus-operator/charts/kube-state-metrics/templates/psp-clusterrole.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app: kube-state-metrics
+    chart: kube-state-metrics-0.14.1
+    heritage: Tiller
+    release: prometheus
+  name: psp-prometheus-kube-state-metrics
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - prometheus-kube-state-metrics

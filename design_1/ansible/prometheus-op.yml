@@ -1,0 +1,5 @@
+---
+- name:  "Running the prometheus playbook"
+  hosts: localhost
+  roles:
+    - helm_install_item

@@ -1,0 +1,34 @@
+---
+# Source: prometheus-operator/templates/prometheus/ingress.yaml
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    blah: blah
+    
+  name: prometheus-prometheus-oper-prometheus
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-prometheus
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  rules:
+    - host: prometheus.oteemo-xc.com
+      http:
+        paths:
+          - path: "/"
+            backend:
+              serviceName: prometheus-prometheus-oper-prometheus
+              servicePort: 9090
+  tls:
+    - hosts:
+      - prometheus.oteemo-xc.com
+      secretName: prometheus-tls
+    

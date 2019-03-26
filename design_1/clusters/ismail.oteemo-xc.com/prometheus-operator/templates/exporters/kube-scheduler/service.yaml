@@ -1,0 +1,29 @@
+---
+# Source: prometheus-operator/templates/exporters/kube-scheduler/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-prometheus-oper-kube-scheduler
+  labels:
+    app: prometheus-operator-kube-scheduler
+    jobLabel: kube-scheduler
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+  namespace: kube-system
+spec:
+  clusterIP: None
+  ports:
+    - name: http-metrics
+      port: 10251
+      protocol: TCP
+      targetPort: 10251
+  selector:
+      
+    component: kube-scheduler
+    tier: control-plane
+  type: ClusterIP

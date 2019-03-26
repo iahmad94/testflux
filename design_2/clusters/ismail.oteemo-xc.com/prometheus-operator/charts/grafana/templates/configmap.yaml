@@ -1,0 +1,30 @@
+---
+# Source: prometheus-operator/charts/grafana/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-grafana
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: grafana
+    chart: grafana-2.2.0
+    release: prometheus
+    heritage: Tiller
+data:
+  grafana.ini: |
+    [analytics]
+    check_for_updates = true
+    [auth.ldap]
+    allow_sign_up = true
+    config_file = /etc/grafana/ldap.toml
+    enabled = true
+    [grafana_net]
+    url = https://grafana.net
+    [log]
+    mode = console
+    [paths]
+    data = /var/lib/grafana/data
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+    provisioning = /etc/grafana/provisioning

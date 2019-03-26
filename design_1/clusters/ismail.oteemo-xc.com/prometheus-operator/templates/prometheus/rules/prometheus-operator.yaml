@@ -1,0 +1,37 @@
+---
+# Source: prometheus-operator/templates/prometheus/rules/prometheus-operator.yaml
+# Generated from 'prometheus-operator' group from https://raw.githubusercontent.com/coreos/prometheus-operator/master/contrib/kube-prometheus/manifests/prometheus-rules.yaml
+# Do not change in-place! In order to change this file first read following link:
+# https://github.com/helm/charts/tree/master/stable/prometheus-operator/hack
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-prometheus-oper-prometheus-operator
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  groups:
+  - name: prometheus-operator
+    rules:
+    - alert: PrometheusOperatorReconcileErrors
+      annotations:
+        message: Errors while reconciling {{ $labels.controller }} in {{ $labels.namespace }} Namespace.
+      expr: rate(prometheus_operator_reconcile_errors_total{job="prometheus-prometheus-oper-operator",namespace="design1"}[5m]) > 0.1
+      for: 10m
+      labels:
+        severity: warning
+    - alert: PrometheusOperatorNodeLookupErrors
+      annotations:
+        message: Errors while reconciling Prometheus in {{ $labels.namespace }} Namespace.
+      expr: rate(prometheus_operator_node_address_lookup_errors_total{job="prometheus-prometheus-oper-operator",namespace="design1"}[5m]) > 0.1
+      for: 10m
+      labels:
+        severity: warning
