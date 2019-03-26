@@ -6,7 +6,7 @@ kind: Prometheus
 metadata:
   name: prometheus-prometheus-oper-prometheus
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: prometheus-operator-prometheus
     
@@ -18,7 +18,7 @@ metadata:
 spec:
   alerting:
     alertmanagers:
-      - namespace: design1
+      - namespace: design2
         name: prometheus-prometheus-oper-alertmanager
         port: web
         pathPrefix: "/"

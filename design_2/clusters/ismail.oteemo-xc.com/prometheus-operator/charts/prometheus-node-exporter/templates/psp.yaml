@@ -13,7 +13,7 @@ metadata:
     
   name: prometheus-prometheus-node-exporter
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
 spec:
   privileged: false
   # Required to prevent escalations to root.

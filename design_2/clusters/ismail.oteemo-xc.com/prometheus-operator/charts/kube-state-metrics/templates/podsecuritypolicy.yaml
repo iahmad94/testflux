@@ -6,7 +6,7 @@ kind: PodSecurityPolicy
 metadata:
   name: prometheus-kube-state-metrics
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: kube-state-metrics
     chart: kube-state-metrics-0.14.1

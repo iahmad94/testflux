@@ -4,13 +4,11 @@
     path: "{{ flux_tmp_dir }}"
     state: directory
 
-
 - name: Create flux ssh secret
   shell: "kubectl --context {{ context }} \
   create secret generic flux-git-deploy -n {{ flux_name_space }} \
   --from-file=identity={{ flux_tmp_dir }}/id_rsa --dry-run -o json |  \
   kubectl --context {{ context }} apply -f -"
-
 
 - name: Create flux-account.yaml
   template:
@@ -19,7 +17,6 @@
 
 - name: Create flux account
   shell: "{{ kubectl_cmd }} apply --context {{ context }} -f {{ flux_tmp_dir }}/flux-account.yaml"
-
 
 - name: Create flux-deployment.yaml
   template:
@@ -45,7 +42,6 @@
 - name: Create memcache deployment
   shell: "{{ kubectl_cmd }} apply --context {{ context }} -f {{ flux_tmp_dir }}/memcache-dep.yaml"
 
-
 - name: Create memchache-svc.yaml
   template:
     src: memcache-svc.yaml.j2
@@ -53,11 +49,5 @@
 
 - name: Create memcache service
   shell: "{{ kubectl_cmd }} apply --context {{ context }} -f {{ flux_tmp_dir }}/memcache-svc.yaml"
-
-
-- name: Delete tmp ansible folder
-  file:
-    path: "{{ flux_tmp_dir }}"
-    state: absent
 
 ...

@@ -13,7 +13,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: prometheus-grafana
-    namespace: design1
+    namespace: design2
 roleRef:
   kind: ClusterRole
   name: prometheus-grafana-clusterrole

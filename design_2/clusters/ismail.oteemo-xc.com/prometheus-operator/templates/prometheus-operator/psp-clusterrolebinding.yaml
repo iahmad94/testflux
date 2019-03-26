@@ -20,4 +20,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-prometheus-oper-operator
-    namespace: design1
+    namespace: design2

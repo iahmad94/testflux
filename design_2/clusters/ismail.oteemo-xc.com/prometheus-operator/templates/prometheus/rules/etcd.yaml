@@ -8,7 +8,7 @@ kind: PrometheusRule
 metadata:
   name: prometheus-prometheus-oper-etcd
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: prometheus-operator
     

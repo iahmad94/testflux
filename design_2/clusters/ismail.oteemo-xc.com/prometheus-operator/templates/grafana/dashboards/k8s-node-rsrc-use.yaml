@@ -8,7 +8,7 @@ kind: ConfigMap
 metadata:
   name: prometheus-prometheus-oper-k8s-node-rsrc-use
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     grafana_dashboard: "1"
     app: prometheus-operator-grafana

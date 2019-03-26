@@ -5,7 +5,7 @@ kind: RoleBinding
 metadata:
   name: prometheus-grafana
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: grafana
     chart: grafana-2.2.0
@@ -18,4 +18,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: prometheus-grafana
-  namespace: design1
+  namespace: design2

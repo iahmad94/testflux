@@ -6,7 +6,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: prometheus-prometheus-oper-prometheus-psp
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: prometheus-operator-prometheus
     

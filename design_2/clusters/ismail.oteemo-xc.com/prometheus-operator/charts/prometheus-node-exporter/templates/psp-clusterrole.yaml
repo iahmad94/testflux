@@ -13,7 +13,7 @@ metadata:
     
   name: psp-prometheus-prometheus-node-exporter
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
 rules:
 - apiGroups: ['extensions']
   resources: ['podsecuritypolicies']

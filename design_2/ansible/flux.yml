@@ -1,0 +1,5 @@
+---
+- name:  "Running the flux playbook"
+  hosts: localhost
+  roles:
+    - install_flux

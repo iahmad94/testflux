@@ -24,7 +24,7 @@ items:
   subjects:
   - kind: ServiceAccount
     name: prometheus-prometheus-oper-prometheus
-    namespace: design1
+    namespace: design2
 - apiVersion: rbac.authorization.k8s.io/v1
   kind: RoleBinding
   metadata:
@@ -37,7 +37,7 @@ items:
       heritage: "Tiller"
       clusterName: ismail.oteemo-xc.com
       
-    namespace: "design1"
+    namespace: "design2"
   roleRef:
     apiGroup: rbac.authorization.k8s.io
     kind: Role
@@ -45,4 +45,4 @@ items:
   subjects:
   - kind: ServiceAccount
     name: prometheus-prometheus-oper-prometheus
-    namespace: design1
+    namespace: design2

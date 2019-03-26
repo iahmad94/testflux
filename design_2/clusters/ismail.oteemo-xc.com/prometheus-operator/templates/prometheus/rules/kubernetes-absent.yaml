@@ -8,7 +8,7 @@ kind: PrometheusRule
 metadata:
   name: prometheus-prometheus-oper-kubernetes-absent
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: prometheus-operator
     
@@ -25,7 +25,7 @@ spec:
       annotations:
         message: Alertmanager has disappeared from Prometheus target discovery.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-alertmanagerdown
-      expr: absent(up{job="prometheus-prometheus-oper-alertmanager",namespace="design1"} == 1)
+      expr: absent(up{job="prometheus-prometheus-oper-alertmanager",namespace="design2"} == 1)
       for: 15m
       labels:
         severity: critical
@@ -81,7 +81,7 @@ spec:
       annotations:
         message: Prometheus has disappeared from Prometheus target discovery.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-prometheusdown
-      expr: absent(up{job="prometheus-prometheus-oper-prometheus",namespace="design1"} == 1)
+      expr: absent(up{job="prometheus-prometheus-oper-prometheus",namespace="design2"} == 1)
       for: 15m
       labels:
         severity: critical
@@ -89,7 +89,7 @@ spec:
       annotations:
         message: PrometheusOperator has disappeared from Prometheus target discovery.
         runbook_url: https://github.com/kubernetes-monitoring/kubernetes-mixin/tree/master/runbook.md#alert-name-prometheusoperatordown
-      expr: absent(up{job="prometheus-prometheus-oper-operator",namespace="design1"} == 1)
+      expr: absent(up{job="prometheus-prometheus-oper-operator",namespace="design2"} == 1)
       for: 15m
       labels:
         severity: critical

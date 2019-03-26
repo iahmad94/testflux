@@ -6,7 +6,7 @@ kind: Ingress
 metadata:
   name: prometheus-prometheus-oper-alertmanager
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   annotations:
     blah: blah
     

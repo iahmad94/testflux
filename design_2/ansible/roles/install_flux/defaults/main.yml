@@ -3,7 +3,7 @@
 #General
 flux_tmp_dir: /tmp/flux_tmp_dir
 kubectl_cmd: kubectl 
-context: 
+context: ismail.oteemo-xc.com
 flux_name_space: "design2"
 flux_image_version: flux:1.11.0
 

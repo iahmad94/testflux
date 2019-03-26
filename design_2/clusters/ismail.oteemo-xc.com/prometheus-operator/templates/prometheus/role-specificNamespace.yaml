@@ -41,7 +41,7 @@ items:
       heritage: "Tiller"
       clusterName: ismail.oteemo-xc.com
       
-    namespace: "design1"
+    namespace: "design2"
   rules:
   - apiGroups:
     - ""

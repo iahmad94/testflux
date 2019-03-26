@@ -6,7 +6,7 @@ kind: ClusterRoleBinding
 metadata:
   name: prometheus-prometheus-oper-alertmanager
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
   labels:
     app: prometheus-operator-alertmanager
     
@@ -22,4 +22,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: prometheus-prometheus-oper-alertmanager
-    namespace: design1
+    namespace: design2

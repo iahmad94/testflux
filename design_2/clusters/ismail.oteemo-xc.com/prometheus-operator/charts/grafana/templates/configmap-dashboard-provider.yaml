@@ -11,7 +11,7 @@ metadata:
     heritage: Tiller
   name: prometheus-grafana-config-dashboards
   #Modified from upstream chart explicitly adding namespace
-  namespace: design1
+  namespace: design2
 data:
   provider.yaml: |-
     apiVersion: 1
