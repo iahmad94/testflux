@@ -1,0 +1,34 @@
+---
+# Source: prometheus-operator/templates/alertmanager/ingress.yaml
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-prometheus-oper-alertmanager
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  annotations:
+    blah: blah
+    
+  labels:
+    app: prometheus-operator-alertmanager
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  rules:
+    - host: alertmanager.oteemo-xc.com
+      http:
+        paths:
+          - path: "/"
+            backend:
+              serviceName: prometheus-prometheus-oper-alertmanager
+              servicePort: 9093
+  tls:
+    - hosts:
+      - alertmanager.oteemo-xc.com
+      secretName: alertmanager-tls
+    

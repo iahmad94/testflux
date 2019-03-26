@@ -1,0 +1,27 @@
+---
+# Source: prometheus-operator/templates/exporters/kube-state-metrics/serviceMonitor.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-prometheus-oper-kube-state-metrics
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-kube-state-metrics
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  jobLabel: app
+  endpoints:
+  - interval: 30s
+    port: http
+    honorLabels: true
+  selector:
+    matchLabels:
+      app: kube-state-metrics
+      release: "prometheus"

@@ -1,0 +1,23 @@
+---
+# Source: prometheus-operator/templates/prometheus-operator/clusterrolebinding.yaml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus-prometheus-oper-operator
+  labels:
+    app: prometheus-operator-operator
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus-prometheus-oper-operator
+subjects:
+- kind: ServiceAccount
+  name: prometheus-prometheus-oper-operator
+  namespace: design1

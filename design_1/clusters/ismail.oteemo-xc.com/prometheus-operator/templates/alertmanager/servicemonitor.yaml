@@ -1,0 +1,29 @@
+---
+# Source: prometheus-operator/templates/alertmanager/servicemonitor.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-prometheus-oper-alertmanager
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-alertmanager
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  selector:
+    matchLabels:
+      app: prometheus-operator-alertmanager
+      release: "prometheus"
+  namespaceSelector:
+    matchNames:
+      - "design1"
+  endpoints:
+  - port: web
+    interval: 30s
+    path: "/metrics"

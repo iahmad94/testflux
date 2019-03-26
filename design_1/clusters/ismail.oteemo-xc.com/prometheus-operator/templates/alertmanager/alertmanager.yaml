@@ -1,0 +1,44 @@
+---
+# Source: prometheus-operator/templates/alertmanager/alertmanager.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: prometheus-prometheus-oper-alertmanager
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-alertmanager
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  baseImage: quay.io/prometheus/alertmanager
+  version: v0.16.1
+  replicas: 1
+  listenLocal: false
+  serviceAccountName: prometheus-prometheus-oper-alertmanager
+  externalUrl: "http://alertmanager.oteemo-xc.com/"
+  paused: false
+  logLevel:  "info"
+  retention: "120h"
+  routePrefix: "/"
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+    
+  storage:
+    volumeClaimTemplate:
+      selector: {}
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: "30"
+        storageClassName: efs
+    

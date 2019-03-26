@@ -1,0 +1,58 @@
+---
+# Source: prometheus-operator/templates/prometheus/prometheus.yaml
+
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus-prometheus-oper-prometheus
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-prometheus
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  alerting:
+    alertmanagers:
+      - namespace: design1
+        name: prometheus-prometheus-oper-alertmanager
+        port: web
+        pathPrefix: "/"
+  baseImage: quay.io/prometheus/prometheus
+  version: v2.7.1
+  externalUrl: "http://prometheus.oteemo-xc.com/"
+  paused: false
+  replicas: 1
+  logLevel:  info
+  listenLocal: false
+  retention: "10d"
+  routePrefix: "/"
+  serviceAccountName: prometheus-prometheus-oper-prometheus
+  serviceMonitorSelector: {}
+  serviceMonitorNamespaceSelector: {}
+  securityContext:
+    fsGroup: 2000
+    runAsNonRoot: true
+    runAsUser: 1000
+    
+  ruleNamespaceSelector: {}
+  ruleSelector:
+    matchLabels:
+      app: prometheus-operator
+      release: "prometheus"
+
+  storage:
+    volumeClaimTemplate:
+      selector: {}
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: "30"
+        storageClassName: efs
+    

@@ -1,0 +1,24 @@
+---
+# Source: prometheus-operator/templates/prometheus/role-config.yaml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus-prometheus-oper-prometheus-config
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-prometheus
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get

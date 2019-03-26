@@ -1,0 +1,27 @@
+---
+# Source: prometheus-operator/templates/grafana/configmaps-datasources.yaml
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-prometheus-oper-grafana-datasource
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    grafana_datasource: "1"
+    app: prometheus-operator-grafana
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+data:
+  datasource.yaml: |-
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-prometheus-oper-prometheus:9090/
+      access: proxy
+      isDefault: true

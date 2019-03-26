@@ -1,0 +1,21 @@
+---
+# Source: prometheus-operator/charts/grafana/templates/pvc.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-grafana
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: grafana
+    chart: grafana-2.2.0
+    release: prometheus
+    heritage: Tiller
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "30"
+  storageClassName: efs

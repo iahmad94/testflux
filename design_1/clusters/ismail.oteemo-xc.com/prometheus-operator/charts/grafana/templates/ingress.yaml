@@ -1,0 +1,29 @@
+---
+# Source: prometheus-operator/charts/grafana/templates/ingress.yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus-grafana
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: grafana
+    chart: grafana-2.2.0
+    release: prometheus
+    heritage: Tiller
+  annotations:
+    blah: blah
+    
+spec:
+  tls:
+    - hosts:
+        - "grafana.oteemo-xc.com"
+      secretName: grafana-tls
+  rules:
+    - host: grafana.oteemo-xc.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: prometheus-grafana
+              servicePort: 80

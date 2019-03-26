@@ -1,0 +1,24 @@
+---
+# This defines a Kubernetes service for the Flux daemon, so you can
+# access it with `fluxctl`. It defines a NodePort, meaning Kubernetes
+# will assign a port to the service, on which it will be available on
+# each node (host in the cluster).
+#
+apiVersion: v1
+kind: Service
+metadata:
+  name: flux
+  namespace: {{ flux_name_space }}
+  labels:
+    name: flux
+spec:
+  type: ClusterIP
+  ports:
+    - name: informational
+      port: 3030
+      targetPort: 3030
+    - name: metrics
+      port: 3031
+      targetPort: 3031
+  selector:
+    name: flux

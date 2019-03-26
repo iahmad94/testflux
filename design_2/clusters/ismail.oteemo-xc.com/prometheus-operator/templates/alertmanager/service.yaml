@@ -1,0 +1,27 @@
+---
+# Source: prometheus-operator/templates/alertmanager/service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus-prometheus-oper-alertmanager
+  #Modified from upstream chart explicitly adding namespace
+  namespace: design1
+  labels:
+    app: prometheus-operator-alertmanager
+    
+    chart: prometheus-operator-4.3.2
+    release: "prometheus"
+    heritage: "Tiller"
+    clusterName: ismail.oteemo-xc.com
+    
+spec:
+  ports:
+    - name: web
+      port: 9093
+      targetPort: 9093
+      protocol: TCP
+  selector:
+    app: alertmanager
+    alertmanager: prometheus-prometheus-oper-alertmanager
+  type: "ClusterIP"

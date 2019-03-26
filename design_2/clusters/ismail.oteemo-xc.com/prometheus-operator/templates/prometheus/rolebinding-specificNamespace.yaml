@@ -1,0 +1,48 @@
+---
+# Source: prometheus-operator/templates/prometheus/rolebinding-specificNamespace.yaml
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBindingList
+items:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: prometheus-prometheus-oper-prometheus
+    labels:
+      app: prometheus-operator-prometheus
+      
+      chart: prometheus-operator-4.3.2
+      release: "prometheus"
+      heritage: "Tiller"
+      clusterName: ismail.oteemo-xc.com
+      
+    namespace: "kube-system"
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: prometheus-prometheus-oper-prometheus
+  subjects:
+  - kind: ServiceAccount
+    name: prometheus-prometheus-oper-prometheus
+    namespace: design1
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: prometheus-prometheus-oper-prometheus
+    labels:
+      app: prometheus-operator-prometheus
+      
+      chart: prometheus-operator-4.3.2
+      release: "prometheus"
+      heritage: "Tiller"
+      clusterName: ismail.oteemo-xc.com
+      
+    namespace: "design1"
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+    name: prometheus-prometheus-oper-prometheus
+  subjects:
+  - kind: ServiceAccount
+    name: prometheus-prometheus-oper-prometheus
+    namespace: design1

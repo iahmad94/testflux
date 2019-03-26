@@ -1,0 +1,20 @@
+##Default values for Prometheus## 
+
+#General
+flux_tmp_dir: /tmp/flux_tmp_dir
+kubectl_cmd: kubectl 
+context: 
+flux_name_space: "design2"
+flux_image_version: flux:1.11.0
+
+# Flux container resource request and limit
+flux_memory_request: "128Mi"
+flux_memory_limit: "256Mi"
+
+#Deployment Details
+flux_git_url: git@github.com:iahmad94/testflux.git
+flux_git_branch: master
+flux_git_path: design_2/clusters/ismail.oteemo-xc.com
+flux_git_poll: 45s
+flux_namespaces_to_watch:
+  - design2
