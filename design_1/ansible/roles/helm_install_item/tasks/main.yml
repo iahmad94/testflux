@@ -56,5 +56,5 @@
 #   shell: |
 #     {{ kubectl_command }} --context {{ context }} \
 #     apply -R  -f {{ cluster_manifest_files_dir }}/{{ item_name }}
-
+#n
 ...
