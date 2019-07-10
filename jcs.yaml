@@ -1,0 +1,126 @@
+  JCasC:
+      enabled: true
+      configScripts:
+          mavenSlave: |
+              jenkins:
+                  clouds:
+                    - kubernetes:
+                          name: kubernetes
+                          serverUrl: "https://kubernetes.default"
+                          namespace: "default"
+                          jenkinsUrl: "http://dev8-jenkins:8080/jenkins"
+                          jenkinsTunnel: "dev8-jenkins-agent:50000"
+                          templates:
+                            - name: "default"
+                              label: "jenkins-jenkins-slave"
+                              nodeUsageMode: EXCLUSIVE
+                              containers:
+                                - name: jnlp
+                                  image: "jenkins/jnlp-slave:3.27-1"
+                                  alwaysPullImage: false
+                                  command: ""
+                                  args: "^${computer.jnlpmac} ^${computer.name}"
+                                  workingDir: "/home/jenkins"
+                                  envVars:
+                                    - envVar:
+                                          key: "JENKINS_URL"
+                                          value: "http://dev8-jenkins.cicd.svc.dev8:8080"
+                            - name: "maven"
+                              label: "maven"
+                              nodeUsageMode: EXCLUSIVE
+                              inheritFrom: "default"
+                              containers:
+                                - name: jnlp
+                                  image: "meetveracity/jenkins-slave-maven"
+                                  alwaysPullImage: true
+                                  workingDir: ""
+                                  command: ""
+                                  args: ""
+                            - name: "helm"
+                              label: "helm"
+                              nodeUsageMode: EXCLUSIVE
+                              inheritFrom: "default"
+                              containers:
+                                - name: jnlp
+                                  image: "meetveracity/jenkins-slave-helm"
+                                  alwaysPullImage: true
+                                  workingDir: ""
+                                  command: ""
+                                  args: ""
+                              serviceAccount: jenkins-helm
+                            - name: "docker"
+                              label: "docker"
+                              nodeUsageMode: EXCLUSIVE
+                              inheritFrom: "default"
+                              containers:
+                                - name: jnlp
+                                  image: "meetveracity/jenkins-slave-docker"
+                                  alwaysPullImage: true
+                                  workingDir: ""
+                                  command: ""
+                                  args: ""
+                                  envVars:
+                                    - envVar:
+                                        key: "DOCKER_REGISTRY_URL"
+                                        value: "https://container-registry.dev8.bip.va.gov"
+                                    - envVar:
+                                        key: "DOCKER_CREDENTIAL_ID"
+                                        value: "docker-registry"
+                                    - envVar:
+                                        key: "DOCKER_HOST"
+                                        value: "tcp://localhost:2375"
+                                - name: dind
+                                  image: "docker:18.05-dind"
+                                  alwaysPullImage: true
+                                  workingDir: ""
+                                  command: ""
+                                  args: ""
+                                  privileged: true
+                              volumes:
+                                - emptyDirVolume:
+                                    mountPath: /var/lib/docker
+                                    memory: false
+                                - configMapVolume:
+                                    mountPath: /etc/docker/certs.d/container-registry.dev8.bip.va.gov
+                                    configMapName: docker-registry-ca
+          credentials: |
+              credentials:
+                  system:
+                      domainCredentials:
+                      - credentials:
+                          - usernamePassword:
+                              scope:    GLOBAL
+                              id:       github
+                              username: ${GIT_USER:-jasonluck}
+                              password: ${GIT_ACCESS_TOKEN}
+                              description: github
+                          - usernamePassword:
+                              scope:    GLOBAL
+                              id:       nexus-login
+                              username: admin
+                              password: admin123
+                              description: nexus-login
+                          - usernamePassword:
+                              scope:    GLOBAL
+                              id:       docker-registry
+                              username: docker
+                              password: docker
+                              description: docker-registry
+          globalLibrary: |
+              unclassified:
+                  globalLibraries:
+                      libraries:
+                        - name: "jenkins-library"
+                          defaultVersion: "promotion"
+                          implicit: true
+                          retriever:
+                              modernSCM:
+                                  scm:
+                                      github:
+                                          repoOwner: "department-of-veterans-affairs"
+                                          repository: "os-svc-jenkins-lib"
+                                          credentialsId: "github"
+                                          traits:
+                                          - gitHubBranchDiscovery
+                                          - originPullRequestDiscoveryTrait
+                                          - gitHubForkDiscovery
